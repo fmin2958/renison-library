@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'library.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'renison',
+        'NAME': 'renisonutf8',
 	'USER': 'user',
 	'PASSWORD': 'password',
 	'HOST': 'localhost',
