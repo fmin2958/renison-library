@@ -12,6 +12,15 @@ from __future__ import unicode_literals
 from django.db import models
 
 
+class BookCover(models.Model):
+    book_id = models.BigIntegerField(db_column='BOOK_ID', primary_key=True)  # Field name made lowercase.
+    image = models.TextField(db_column='IMAGE', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'BOOK_COVER'
+
+
 class Borrower(models.Model):
     brwr_rowkey = models.BigIntegerField(db_column='BRWR_ROWKEY', primary_key=True)  # Field name made lowercase.
     brwr_fname = models.CharField(db_column='BRWR_FNAME', max_length=100, blank=True, null=True)  # Field name made lowercase.
@@ -393,11 +402,16 @@ class TypeList(models.Model):
         db_table = 'TYPE_LIST'
 
 
-class DjangoMigrations(models.Model):
-    app = models.CharField(max_length=255)
-    name = models.CharField(max_length=255)
-    applied = models.DateTimeField()
+class WebappConfiguration(models.Model):
+    name = models.CharField(primary_key=True, max_length=127)
+    value = models.CharField(max_length=127)
+    value_1 = models.CharField(max_length=255, blank=True, null=True)
+    value_2 = models.CharField(max_length=255, blank=True, null=True)
+    value_3 = models.CharField(max_length=255, blank=True, null=True)
+    value_4 = models.CharField(max_length=255, blank=True, null=True)
+    value_5 = models.CharField(max_length=255, blank=True, null=True)
+    value_6 = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'django_migrations'
+        db_table = 'WEBAPP_CONFIGURATION'
