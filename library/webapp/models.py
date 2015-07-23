@@ -14,7 +14,7 @@ from django.db import models
 
 class BookCover(models.Model):
     book_id = models.BigIntegerField(db_column='BOOK_ID', primary_key=True)  # Field name made lowercase.
-    image = models.TextField(db_column='IMAGE', blank=True, null=True)  # Field name made lowercase.
+    image_dir = models.CharField(db_column='IMAGE_DIR', max_length=255, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False

@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load static %}
+
 {% block main %}
 
 <div class="container-fluid">
@@ -10,7 +12,7 @@
 					<p>{{ title }}</p>
 					<p></p>
 
-					<img alt="Bootstrap Image Preview" src="http://lorempixel.com/140/140/" />
+					<img alt="Book Cover" src="{% static cover %}" />
 
 				</div>
 

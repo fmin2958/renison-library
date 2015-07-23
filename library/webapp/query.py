@@ -5,7 +5,7 @@ from webapp import models
 #TODO: this one is nasty - either update the models or write a generic raw query in query.py
 
 def run_query(query):
-    #print "running query: '%s'" % query
+    print "running query: %s" % query
     cursor = connection.cursor()
     cursor.execute(query)
     result = ()
@@ -16,7 +16,7 @@ def run_query(query):
     except Exception as e:
         print e
 
-    #print result
+    print ("query result: ", result)
 
     return result
 
@@ -28,7 +28,7 @@ def get_book_info(keyword):
     # TODO: the keyword is currently limited to BARCODE, need to refector the
     # function to accept any arbitrary keywords (more than 1)
 
-    rows = run_query('select * from WEBAPP_CONFIGURATION where value = "1" and name like "%get_book_info%"')
+    rows = run_query('select * from WEBAPP_CONFIGURATION where name like "%get_book_info%" and value = "1"')
 
     query = 'select '
     need_join = 0
@@ -74,8 +74,13 @@ def get_book_info(keyword):
 
     if title_indicator:
         title = values[title_at]
+
     if cover_indicator:
-        cover = values[title_at]
+        cover = values[cover_at]
+
+    #else:
+        #use default cover
+
 
     content = dict(zip(columns, values))
 
@@ -87,6 +92,3 @@ def get_book_info(keyword):
     result = {'content': content, 'title': title, 'cover': cover}
 
     return result
-
-
-#def get_book_cover(keyword):
