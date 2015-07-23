@@ -1,3 +1,8 @@
+from urllib2 import urlopen
+import urllib
+import json
+
+from django.conf import settings
 from django.db import connection
 
 from webapp import models
@@ -6,6 +11,7 @@ from webapp import models
 
 def run_query(query):
     print "running query: %s" % query
+    print
     cursor = connection.cursor()
     cursor.execute(query)
     result = ()
@@ -17,6 +23,7 @@ def run_query(query):
         print e
 
     print ("query result: ", result)
+    print
 
     return result
 
@@ -32,12 +39,15 @@ def get_book_info(keyword):
 
     query = 'select '
     need_join = 0
-    title_at = -1
-    cover_at = -1
+    title_at = None
+    cover_at = None
     title_indicator = ''
     cover_indicator = ''
     count = 0
     columns= []
+    book_cover_config = models.WebappConfiguration.objects.filter(name = 'book_cover_api_config')
+
+    cover_id = models.Readerware.objects.filter(barcode = keyword).values('rowkey')[0]['rowkey']
 
     if rows:
         for item in rows:
@@ -78,8 +88,8 @@ def get_book_info(keyword):
     if cover_indicator:
         cover = values[cover_at]
 
-    #else:
-        #use default cover
+    if not cover:
+        cover = get_book_cover_default()
 
 
     content = dict(zip(columns, values))
@@ -92,3 +102,79 @@ def get_book_info(keyword):
     result = {'content': content, 'title': title, 'cover': cover}
 
     return result
+
+
+def get_book_cover_default():
+
+    query_result = query_result = models.WebappConfiguration.objects.filter(name = 'book_cover_api_config')
+    
+    return query_result.values('value')[0]['value'] + query_result.values('value_1')[0]['value_1']
+
+
+def get_book_cover(keyword):
+    #need test - not functioning as expected
+    print 'finding book cover of: %s' % keyword
+    print
+    query_result = models.WebappConfiguration.filter(name = 'book_cover_api_config')
+
+    try:
+        result = models.BookCover.objects.filter(book_id = keyword).values('image_url')[0]['image_url']
+
+    except Exception, e:
+        print e
+
+        #default image
+        print 'image not found - using default image'
+        result = get_book_cover_default()
+
+    return result
+
+
+def update_book_cover(keyword):
+    request = ''
+    image_url = ''
+    file_name = ''
+    file_dir = ''
+
+    query_result = models.WebappConfiguration.filter(name = 'book_cover_api_config')
+
+    file_dir = query_result.values('value')[0]['value']
+
+    item = models.Readerware.objects.filter(isbn = keyword)
+
+    book_id = item.values('rowkey')[0]['rowkey']
+
+    all_api = models.WebappConfiguration.objects.filter(name__icontains = 'book_cover_api').values()
+
+    for api in all_api:
+        if api[1] and not image_url:
+            request = api[1] + keyword + api[2]
+
+            try:
+                image_url = json.loads(urlopen(request).read())[api[3]]
+
+            except KeyError:
+                print 'cannot find image / json key does not match'
+                image_url = ''
+
+            except Exception, e:
+                print e
+                image_url = ''
+
+    if image_url:
+
+        file_name = image_url.split('/')[-1]
+        file_dir += file_name
+
+        try:
+            urllib.urlretrieve(image_url, file_dir)
+
+        except Exception, e:
+            print e
+
+            file_name = None
+
+
+        models.BookCover(book_id = book_id, image_dir = file_dir).save()
+
+    return
