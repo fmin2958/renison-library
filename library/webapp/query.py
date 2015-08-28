@@ -1,11 +1,16 @@
+import os
+
 from urllib2 import urlopen
 import urllib
 import json
 
 from django.conf import settings
 from django.db import connection
+from django.utils.encoding import DjangoUnicodeDecodeError
 
 from webapp import models
+
+from webapp import config
 
 #TODO: this one is nasty - either update the models or write a generic raw query in query.py
 
@@ -105,17 +110,14 @@ def get_book_info(keyword):
 
 
 def get_book_cover_default():
-
-    query_result = query_result = models.WebappConfiguration.objects.filter(name = 'book_cover_api_config')
-    
-    return query_result.values('value')[0]['value'] + query_result.values('value_1')[0]['value_1']
+    return config.DEFAULT_COVER_FILE_PATH
 
 
 def get_book_cover(keyword):
-    #need test - not functioning as expected
+    #TODO: should be working, not tested
+    result = ''
     print 'finding book cover of: %s' % keyword
     print
-    query_result = models.WebappConfiguration.filter(name = 'book_cover_api_config')
 
     try:
         result = models.BookCover.objects.filter(book_id = keyword).values('image_url')[0]['image_url']
@@ -131,50 +133,88 @@ def get_book_cover(keyword):
 
 
 def update_book_cover(keyword):
+    result = False
     request = ''
     image_url = ''
     file_name = ''
     file_dir = ''
 
-    query_result = models.WebappConfiguration.filter(name = 'book_cover_api_config')
-
-    file_dir = query_result.values('value')[0]['value']
+    file_dir = config.COVER_PATH
 
     item = models.Readerware.objects.filter(isbn = keyword)
 
-    book_id = item.values('rowkey')[0]['rowkey']
+    if item:
+        book_id = item.values('rowkey')[0]['rowkey']
 
-    all_api = models.WebappConfiguration.objects.filter(name__icontains = 'book_cover_api').values()
+        all_api = models.WebappConfiguration.objects.filter(name__icontains = 'book_cover_api_get_by').values()
 
-    for api in all_api:
-        if api[1] and not image_url:
-            request = api[1] + keyword + api[2]
+        for api in all_api:
+
+            if api['value'] and not image_url:
+                request = api['value'] + keyword + api['value_1']
+
+                try:
+                    image_url = json.loads(urlopen(request).read())[api['value_2']]
+
+                except KeyError:
+                    print 'cannot find image / json key does not match'
+                    image_url = ''
+
+                except Exception, e:
+                    print e
+                    image_url = ''
+
+        if image_url:
+
+            file_name = image_url.split('/')[-1]
+            file_dir += file_name
 
             try:
-                image_url = json.loads(urlopen(request).read())[api[3]]
-
-            except KeyError:
-                print 'cannot find image / json key does not match'
-                image_url = ''
+                urllib.urlretrieve(image_url, os.path.join(settings.STATIC_PATH, file_dir))
 
             except Exception, e:
                 print e
-                image_url = ''
 
-    if image_url:
+                file_name = None
 
-        file_name = image_url.split('/')[-1]
-        file_dir += file_name
+            models.BookCover(book_id = book_id, image_dir = file_dir).save()
+
+            result = True
+
+        else:
+            print 'no image found for book with given isbn (%s)' % keyword
+
+    else:
+        print 'book with given isbn (%s) does not exist in database.' % keyword
+
+    return result
+
+
+def update_book_cover_all():
+    success_count = 0
+
+    items = models.Readerware.objects.exclude(isbn__isnull = True)
+    items_length = items.count()
+
+    print 'updating %s books\' cover' % items_length
+    print
+
+    for index in range(0, items_length):
+        print 'updating %s / %s book\'s cover' % (index + 1, items_length)
+        #TODO: need to be updated when migrating to py3
+
+        #TODO: known bug: UnicodeDecodeError will be thrown if the db uses BOM it should be fixed on the db side so exception is supressed.
 
         try:
-            urllib.urlretrieve(image_url, file_dir)
+            update_result = update_book_cover(items[index].isbn)
+        except DjangoUnicodeDecodeError:
+            pass
 
-        except Exception, e:
-            print e
+        else:
+            if update_result:
+                success_count += 1
 
-            file_name = None
-
-
-        models.BookCover(book_id = book_id, image_dir = file_dir).save()
+    print '%s / %s covers updated.' % (success_count, items_length)
+    print
 
     return
