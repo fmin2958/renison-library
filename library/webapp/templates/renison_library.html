@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Renison | Lusi Wong Library</title>
+
+    <link rel="stylesheet" href="css/ext/bootstrap.css"/>
+    <link rel="stylesheet" href="css/renison_library.css"/>
+    <!-- script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script -->
+
+</head>
+<body>
+
+    <div id="logo_container" class="container">Logo</div>
+    <div id="library_title" class="container"></div>
+
+    <div id="nav_div">
+        <div class="row">
+            <div class="col-sm-12">
+                <ul class="nav nav-tabs nav-justified">
+                    <li id="nav-home-tab" class="active"><a href="#home">Home</a></li>
+                    <li id="nav-booklist-tab"><a href="#booklist">Book List</a></li>
+                    <li id="nav-search-tab"><a href="#search">Search</a></li>
+                    <li id="nav-about-tab"><a href="#about">About</a></li>
+                    <li id="nav-contact-tab"><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="home_div" class="pageDiv">Home</div>
+    <div id="booklist_div" class="pageDiv hidden">BookList</div>
+    <div id="search_div" class="pageDiv hidden">Search</div>
+    <div id="about_div" class="pageDiv hidden">About</div>
+    <div id="contact_div" class="pageDiv hidden">Contact</div>
+
+    <script src="js/ext/jquery/jquery.js"></script>
+    <script src="js/ext/underscore.js"></script>
+    <script src="js/models.js"></script>
+    <script src="js/views.js"></script>
+    <script src="js/renison_library.js"></script>
+</body>
+</html>
