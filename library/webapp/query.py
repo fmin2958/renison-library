@@ -46,8 +46,8 @@ def get_book_info(keyword):
     need_join = 0
     title_at = None
     cover_at = None
-    title_indicator = ''
-    cover_indicator = ''
+    title_indicator = u''
+    cover_indicator = u''
     count = 0
     columns= []
     book_cover_config = models.WebappConfiguration.objects.filter(name = 'book_cover_api_config')
@@ -115,7 +115,7 @@ def get_book_cover_default():
 
 def get_book_cover(keyword):
     #TODO: should be working, not tested
-    result = ''
+    result = u''
     print 'finding book cover of: %s' % keyword
     print
 
@@ -134,10 +134,10 @@ def get_book_cover(keyword):
 
 def update_book_cover(keyword):
     result = False
-    request = ''
-    image_url = ''
-    file_name = ''
-    file_dir = ''
+    request = u''
+    image_url = u''
+    file_name = u''
+    file_dir = u''
 
     file_dir = config.COVER_PATH
 
@@ -158,11 +158,11 @@ def update_book_cover(keyword):
 
                 except KeyError:
                     print 'cannot find image / json key does not match'
-                    image_url = ''
+                    image_url = u''
 
                 except Exception, e:
                     print e
-                    image_url = ''
+                    image_url = u''
 
         if image_url:
 
@@ -208,6 +208,7 @@ def update_book_cover_all():
         try:
             update_result = update_book_cover(items[index].isbn)
         except DjangoUnicodeDecodeError:
+            print 'Unicode Error Encountered.'
             pass
 
         else:

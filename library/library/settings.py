@@ -37,6 +37,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'haystack',
+
     'webapp',
 )
 
@@ -114,3 +117,15 @@ STATICFILES_DIRS = (
     STATIC_PATH,
 
 )
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE' : 'haystack.backends.solr_backend.SolrEngine',
+        'URL' : 'http://127.0.0.1:8080/solr'
+    },
+}
+
+TEMPLATE_DIRS = {
+    os.path.join(BASE_DIR, )
+
+}

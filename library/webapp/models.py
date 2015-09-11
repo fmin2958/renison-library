@@ -11,6 +11,11 @@ from __future__ import unicode_literals
 
 from django.db import models
 
+import sys
+
+reload(sys)
+sys.setdefaultencoding("utf-8")
+
 
 class BookCover(models.Model):
     book_id = models.BigIntegerField(db_column='BOOK_ID', primary_key=True)  # Field name made lowercase.
