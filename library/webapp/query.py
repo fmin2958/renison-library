@@ -33,12 +33,16 @@ def run_query(query):
     return result
 
 
-def get_book_info(keyword):
+def get_book_info(field, keyword):
     # the function will be get_book_info(columns, keyword)
     # columns: a list that contains columns that needs to be displayed
     # keyword: the keyword for searching books
-    # TODO: the keyword is currently limited to BARCODE, need to refector the
-    # function to accept any arbitrary keywords (more than 1)
+
+    # NOTE: function is refactored, now accepts fields in the Readerware table
+    # need more testing.
+
+    # NOTE: returned value changed: now returns a list of dict,
+    # i.e. result[0] is the original expected output.
 
     rows = run_query('select * from WEBAPP_CONFIGURATION where name like "%get_book_info%" and value = "1"')
 
@@ -50,9 +54,12 @@ def get_book_info(keyword):
     cover_indicator = u''
     count = 0
     columns= []
+
     book_cover_config = models.WebappConfiguration.objects.filter(name = 'book_cover_api_config')
 
-    cover_id = models.Readerware.objects.filter(barcode = keyword).values('rowkey')[0]['rowkey']
+    result = []
+
+    print 'flag'
 
     if rows:
         for item in rows:
@@ -81,30 +88,33 @@ def get_book_info(keyword):
                 if item[4]:
                     query += 'left join %s on %s.%s = %s.%s ' % (item[3], item[4], item[7], item[3], item[6])
 
-        query += 'where BARCODE = "%s"' % (keyword)
+        query += 'where READERWARE.%s like "%%%s%%"' % (field, keyword)
 
     query_result = run_query(query)
 
     values = list(query_result[0])
 
-    if title_indicator:
-        title = values[title_at]
+    for item in query_result:
+        values = list(item)
 
-    if cover_indicator:
-        cover = values[cover_at]
+        if title_indicator:
+            title = values[title_at]
 
-    if not cover:
-        cover = get_book_cover_default()
+        if cover_indicator:
+            cover = values[cover_at]
+
+        if not cover:
+            cover = get_book_cover_default()
 
 
-    content = dict(zip(columns, values))
+        content = dict(zip(columns, values))
 
-    if title_indicator:
-        del content[title_indicator]
-    if cover_indicator:
-        del content[cover_indicator]
+        if title_indicator:
+            del content[title_indicator]
+        if cover_indicator:
+            del content[cover_indicator]
 
-    result = {'content': content, 'title': title, 'cover': cover}
+        result.append({'content': content, 'title': title, 'cover': cover})
 
     return result
 

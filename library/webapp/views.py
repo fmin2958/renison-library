@@ -3,7 +3,7 @@ from django.shortcuts import render
 
 from webapp import query
 
-def book_info_by_barcode(request, barcode):
+def book_info_by_barcode(request, book_id):
     # return:
     # -1: no barcode matches found. (default result)
     # -2: other errors
@@ -17,7 +17,7 @@ def book_info_by_barcode(request, barcode):
     #TODO: this one is nasty - either update the models or write a generic raw query in query.py
 
     try:
-        context = query.get_book_info(barcode)
+        context = query.get_book_info('call_number', book_id)[0]
 
     #todo: fix the exception part
     except Exception as e:

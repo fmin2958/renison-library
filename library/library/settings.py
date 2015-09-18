@@ -117,11 +117,10 @@ STATICFILES_DIRS = (
     STATIC_PATH,
 
 )
-
 HAYSTACK_CONNECTIONS = {
     'default': {
-        'ENGINE' : 'haystack.backends.solr_backend.SolrEngine',
-        'URL' : 'http://127.0.0.1:8080/solr'
+        'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+        'URL': 'http://127.0.0.1:8080/solr'
     },
 }
 
