@@ -1,0 +1,28 @@
+<div class="jumbotron text-center push-top ng-scope">
+    <div id="cover_container">
+        <img id="main_book_cover" ng-src="{{currentBook.imageLinks.thumbnail}}">
+    </div>
+    <div id="info_container">
+        <table id="info_table" cellspacing="0" cellpadding="0" border="0">
+            <tbody>
+            <tr>
+                <td>
+                    <h2><b>{{currentBook.title}}</b></h2>
+                    <div id="info_content">
+                        <ul id="info_list">
+                            <li><b>Author: </b>{{currentBook.authors[0]}}</li>
+                            <li><b>ISBN: </b>{{currentBook.industryIdentifiers[1].identifier}}</li>
+                            <li><b>Dewey: </b>123 456 78</li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="desc_container">
+        <h2>Description</h2>
+        <div>{{currentBook.description}}</div>
+    </div>
+
+</div>
