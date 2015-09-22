@@ -1,5 +1,38 @@
-<div class="text-center">
-    <h1>Search Page</h1>
-
-    <p>{{ message }}</p>
+<div class="push-top">
+    <div class="searchBarContainer">
+        <input type="text" class="searchBar" ng-model="searchInput"/>
+<!--         <input type="image" src="../assets/images/filter.png" class="filterButton" ng-click="filter()"/> -->
+    </div>
+    <div class="searchButtonContainer text-center">
+        <input type="button" value="Search" class="searchButton" ng-click="searchAction(searchInput)"/>
+    </div>
+</div>
+<div class="text-center push-half-top resultPages" ng-show="searchResults">
+    <button ng-click="selectFirstPage()">First</button>
+    <div class="resultPageNumbers">
+        <button ng-repeat="pageNumber in endingPageNumber track by $index" 
+                ng-click="pageNumberClicked($index)"
+                ng-class="{ 'pageSelected': $index == selectedPageIndex }">
+            {{$index + 1}}
+        </button>
+    </div>
+    <button ng-click="selectLastPage()">Last</button>
+</div>
+<div class="text-center push-top" ng-show="noResults">
+    <h1>No results</h1>
+</div>
+<div class="searchResult">
+    <div class="row push-bottom" ng-repeat="book in currentPageBooks">
+        <div class="col-md-4 text-center">
+            <div class="imageContainer">
+                <img ng-src="{{book.volumeInfo.imageLinks.thumbnail}}"/>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <h1>{{book.volumeInfo.title}}</h1>
+            <h3 ng-show="book.volumeInfo.subtitle">{{book.volumeInfo.subtitle}}</h3>
+            <h4>{{book.volumeInfo.authors[0]}}</h4>
+            <a ng-href="{{getDetailUrl(book.id)}}">View More</a>
+        </div>
+    </div>
 </div>

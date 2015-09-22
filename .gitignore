@@ -1,4 +1,5 @@
+# Ignore WebStorm stuff
 library/webapp/templates/.idea/
 
 # Ignore bower components.
-bower_components
+library/webapp/templates/bower_components
