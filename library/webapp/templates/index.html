@@ -1,42 +1,50 @@
+{% load static staticfiles %}
+
 <!DOCTYPE html>
 <html lang="en" ng-app="renisonlibraryApp">
 <head>
     <meta charset="UTF-8">
     <title>Renison | Lusi Wong Library</title>
 
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"/>
-    <link rel="stylesheet" href="css/main.css"/>
-    <script src="bower_components/angular/angular.js"></script>
-    <script src="bower_components/angular-route/angular-route.js"></script>
-    <script src="js/app.js"></script>
-    <script src="js/controllers/mainController.js"></script>
-    <script src="js/controllers/searchController.js"></script>
-    <script src="js/controllers/bookDetailController.js"></script>
+    <link rel="stylesheet" href="{% static 'bower_components/bootstrap/dist/css/bootstrap.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}"/>
+    <script src="{% static 'bower_components/angular/angular.js' static %}"></script>
+    <script src="{% static 'bower_components/angular-route/angular-route.js' static %}"></script>
+    <script src="{% static 'js/app.js' static %}"></script>
+    <script src="{% static 'js/controllers/mainController.js' static %}"></script>
+    <script src="{% static 'js/controllers/searchController.js' static %}"></script>
+    <script src="{% static 'js/controllers/bookDetailController.js' static %}"></script>
 
 </head>
 <body ng-controller="homeController">
 
     <div id="logo_container" class="container">
-        <img id="renison_logo" src="resources/renison_logo.gif">
+        <img id="renison_logo" src="{% static 'resources/renison_logo.gif' %}">
     </div>
     <div id="library_title" class="container"></div>
     <div id="nav_div">
         <div class="row">
             <div class="col-sm-10 col-sm-offset-1">
                 <ul class="nav nav-tabs nav-justified">
-                    <li id="nav-home-tab" ng-class="home_active_status"><a href="#home">Home</a></li>
-                    <li id="nav-booklist-tab" ng-class="booklist_active_status"><a href="#booklist">Book List</a></li>
-                    <li id="nav-search-tab" ng-class="search_active_status"><a href="#search">Search</a></li>
-                    <li id="nav-about-tab" ng-class="about_active_status"><a href="#about">About</a></li>
-                    <li id="nav-contact-tab" ng-class="contact_active_status"><a href="#contact">Contact</a></li>
+                    <li id="nav-home-tab" class="home_active_status"><a href="/webapp/home">Home</a></li>
+                    <li id="nav-booklist-tab" class="booklist_active_status"><a href="/webapp/booklist">Book List</a></li>
+                    <li id="nav-search-tab" class="search_active_status"><a href="/webapp/search">Search</a></li>
+                    <li id="nav-about-tab" class="about_active_status"><a href="/webapp/about">About</a></li>
+                    <li id="nav-contact-tab" class="contact_active_status"><a href="/webapp/contact">Contact</a></li>
                 </ul>
             </div>
         </div>
     </div>
     <div id="main" class="container">
-        
-        <div ng-view></div>
-        
+
+            {% block content %}
+
+            <div>
+                <p>Welcome to Renison's Lusi Wong Library.<p>
+            </div>
+
+            {% endblock %}
+
     </div>
 </body>
 </html>

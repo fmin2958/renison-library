@@ -1,18 +1,24 @@
+{% extends "index.html" %}
+
+{% load static %}
+
+{% block content %}
+
 <div class="jumbotron text-center push-top ng-scope">
     <div id="cover_container">
-        <img id="main_book_cover" ng-src="{{currentBook.imageLinks.thumbnail}}">
+        <img id="main_book_cover"src="{% static cover %}">
     </div>
     <div id="info_container">
         <table id="info_table" cellspacing="0" cellpadding="0" border="0">
             <tbody>
             <tr>
                 <td>
-                    <h2><b>{{currentBook.title}}</b></h2>
+                    <h2><b>{{title}}</b></h2>
                     <div id="info_content">
                         <ul id="info_list">
-                            <li><b>Author: </b>{{currentBook.authors[0]}}</li>
-                            <li><b>ISBN: </b>{{currentBook.industryIdentifiers[1].identifier}}</li>
-                            <li><b>Dewey: </b>123 456 78</li>
+                            <li><b>Author: </b>{{content.Author}}</li>
+                            <li><b>ISBN: </b>{{content.ISBN}}</li>
+                            <li><b>Dewey: </b>{{content.Dewey}}</li>
                         </ul>
                     </div>
                 </td>
@@ -22,7 +28,9 @@
     </div>
     <div id="desc_container">
         <h2>Description</h2>
-        <div>{{currentBook.description}}</div>
+        <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget sapien sapien. Curabitur in metus urna. In hac habitasse platea dictumst. Phasellus eu sem sapien, sed vestibulum velit. Nam purus nibh, lacinia non faucibus et, pharetra in dolor. Sed iaculis posuere diam ut cursus. Morbi commodo sodales nisi id sodales. Proin consectetur, nisi id commodo imperdiet, metus nunc consequat lectus, id bibendum diam velit et dui. Proin massa magna, vulputate nec bibendum nec, posuere nec lacus. Aliquam mi erat, aliquam vel luctus eu, pharetra quis elit. Nulla euismod ultrices massa, et feugiat ipsum consequat eu.</div>
     </div>
 
 </div>
+
+{% endblock %}

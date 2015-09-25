@@ -110,11 +110,14 @@ USE_TZ = True
 STATIC_ROOT = ''
 
 STATIC_PATH = os.path.join(BASE_DIR, 'static')
+STATIC_PATH_WEBAPP = os.path.join(BASE_DIR, 'webapp', 'templates')
 
 STATIC_URL = '/static/'
 
+
 STATICFILES_DIRS = (
     STATIC_PATH,
+    STATIC_PATH_WEBAPP,
 
 )
 HAYSTACK_CONNECTIONS = {

@@ -26,7 +26,25 @@ def book_info_by_barcode(request, book_id):
         print e
 
     if context:
-        template = 'book_page.html'
+        template = 'pages/book_detail.html'
+
+    result = render(request, template, context)
+
+    return result
+
+def home_page_render(request):
+    context = {}
+    result = None
+    template = 'pages/home.html'
+
+    result = render(request, template, context)
+
+    return result
+
+def search_page_render(request):
+    context = {}
+    result = None
+    template = 'pages/search.html'
 
     result = render(request, template, context)
 
