@@ -3,6 +3,10 @@ from django.shortcuts import render
 
 from webapp import query
 
+from django.http import HttpResponse
+import json
+
+
 def book_info_by_barcode(request, book_id):
     # return:
     # -1: no barcode matches found. (default result)
@@ -32,6 +36,7 @@ def book_info_by_barcode(request, book_id):
 
     return result
 
+
 def home_page_render(request):
     context = {}
     result = None
@@ -41,7 +46,9 @@ def home_page_render(request):
 
     return result
 
+
 def search_page_render(request):
+    #TODO: retrieve look-up field and keyword from GET form/request
     context = {}
     result = None
     template = 'pages/search.html'
@@ -49,3 +56,15 @@ def search_page_render(request):
     result = render(request, template, context)
 
     return result
+
+def echo(request):
+
+    result = {
+        'title' : 'My Title',
+        'content' : 'My Book Content'
+
+    }
+
+    json_result = json.dumps(result)
+
+    return HttpResponse(json_result, content_type="application/json")
