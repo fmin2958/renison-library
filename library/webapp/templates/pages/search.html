@@ -25,13 +25,13 @@
     <div class="row push-bottom" ng-repeat="book in currentPageBooks">
         <div class="col-md-4 text-center">
             <div class="imageContainer">
-                <img ng-src="{{book.volumeInfo.imageLinks.thumbnail}}"/>
+                <img ng-src="{{bookCoverBaseApi + book.cover}}"/>
             </div>
         </div>
         <div class="col-md-8">
-            <h1>{{book.volumeInfo.title}}</h1>
-            <h3 ng-show="book.volumeInfo.subtitle">{{book.volumeInfo.subtitle}}</h3>
-            <h4>{{book.volumeInfo.authors[0]}}</h4>
+            <h1>{{book.title}}</h1>
+            <!--h3 ng-show="book.volumeInfo.subtitle">{{book.volumeInfo.subtitle}}</h3-->
+            <h4>{{book.content.author}}</h4>
             <a ng-href="{{getDetailUrl(book.id)}}">View More</a>
         </div>
     </div>

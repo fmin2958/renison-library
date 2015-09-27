@@ -1,6 +1,7 @@
 var searchController = angular.module('searchController', []);
 
-var googleBookApiLink = 'https://www.googleapis.com/books/v1/volumes';
+var renLibSearchBaseApiLink = 'http://45.55.82.111:8000/webapp/api/v1/book/search/?';
+var renLibBookCoverBaseApiLink = 'http://45.55.82.111:8000';
 
 searchController.controller('searchController', ['$scope', '$http', '$routeParams', '$location', 
     function($scope, $http, $routeParams, $location) {
@@ -15,6 +16,8 @@ searchController.controller('searchController', ['$scope', '$http', '$routeParam
         }
 
         $scope.changeActiveTab(SEARCH_TAB);
+		//Set the base get api for image cover src
+		$scope.bookCoverBaseApi = renLibBookCoverBaseApiLink;
         $scope.selectedPageIndex = 0;
         $scope.noResults = false;
 
@@ -27,36 +30,38 @@ searchController.controller('searchController', ['$scope', '$http', '$routeParam
             if (!keyWord) return;
             $location.search('text', keyWord);
 
+
             if (!beginPage) {
                 beginPage = 0;
             }
 
-            $http.get(googleBookApiLink, {
-                params : {
-                    q: keyWord,
-                    maxResults: 40
-                }
-            })
+
+            $http.get(renLibSearchBaseApiLink, {
+				params : {
+					field: 'title',
+					keyword: keyWord
+				}})
             .success(function (data, status) {
                 if (status === 200) {
-                    if (data.totalItems == 0) {
+                    if (data.books.length == 0) {
                         $scope.searchResults = null;
                         $scope.noResults = true;
                         return;
                     }
-                    $scope.searchResults = data.items;
-                    updateCurrentPageBooks(data.items, beginPage);
+                    $scope.searchResults = data.books;
+                    updateCurrentPageBooks(data.books, beginPage);
 
-                    if (data.totalItems < 10) {
+                    if (data.books.length < 10) {
                         $scope.endingPageNumber = 1;
                     } else {
-                        $scope.endingPageNumber = new Array(data.items.length / 10);
+                        $scope.endingPageNumber = new Array(data.books.length / 10);
                     }
 
                     $location.search('page', beginPage);
                     $scope.searchInput = keyWord;
                 }
             });
+
         };
 
         $scope.pageNumberClicked = function ($index) {
