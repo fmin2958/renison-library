@@ -1,10 +1,11 @@
 from django.template.loader import get_template
 from django.shortcuts import render
 
-from webapp import query
-
 from django.http import HttpResponse
 import json
+
+from webapp import query
+from webapp import api
 
 
 def book_info_by_barcode(request, book_id):

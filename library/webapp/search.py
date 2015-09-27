@@ -9,6 +9,8 @@ from webapp import models
 from webapp import config
 from webapp import query
 
+import json
+
 show_fields = ['title', 'author', 'isbn', 'dewey', 'cover'] # does not have any effect - just a note
 
 readerware_fields = ['title', 'isbn', 'dewey']
@@ -39,8 +41,10 @@ def do_search(field, keyword):
     #TODO: need to refactor the function to search fields other than those in the Readerware table
     # e.g. author(contributor), language, etc.
 
-    table_is = None
-    result = []
+    # POST: json result of book search
+
+    book_list = []
+    result = {}
 
     print field, keyword
 
@@ -48,7 +52,7 @@ def do_search(field, keyword):
         keyword = keyword.replace(',', ' ').replace(';', ' ').replace('+', ' ').split()
 
         if field == 'title':
-            result = query.get_book_info('title', keyword)
+            book_list = query.get_book_info('title', keyword)
 
         elif field == 'author':
             author_keywords = get_author_id_list(keyword)
@@ -58,9 +62,27 @@ def do_search(field, keyword):
                     for author_field in author_fields:
                         search_result = query.get_book_info(author_field, author_keyword, is_exact=True)
                         if search_result:
-                            result += search_result
+                            book_list += search_result
 
         elif field == 'isbn':
-            result = query.get_book_info('isbn', keyword)
+            book_list = query.get_book_info('isbn', keyword)
+
+
+    if book_list:
+        result['books'] = book_list
+
+    else:
+        result['error'] = 'No Book Found'
+
+
+    result = json.dumps(result)
+
+    return result
+
+
+def get_all_book(limit=2000):
+    result = query.get_book_info(no_keyword=True, search_limit=limit)
+
+    result = json.dumps(result)
 
     return result

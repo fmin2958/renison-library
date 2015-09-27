@@ -33,7 +33,7 @@ def run_query(query):
     return result
 
 
-def get_book_info(field, keyword, is_exact=False):
+def get_book_info(field=False, keyword=False, is_exact=False, search_limit=config.SEARCH_MAX_ITEM, no_keyword=False):
     # the function will be get_book_info(columns, keyword)
     # columns: a list that contains columns that needs to be displayed
     # keyword: the keyword for searching books
@@ -50,6 +50,7 @@ def get_book_info(field, keyword, is_exact=False):
     need_join = 0
     title_at = None
     cover_at = None
+    book_id_at = None
     title_indicator = u''
     cover_indicator = u''
     count = 0
@@ -58,6 +59,9 @@ def get_book_info(field, keyword, is_exact=False):
     book_cover_config = models.WebappConfiguration.objects.filter(name = 'book_cover_api_config')
 
     result = []
+
+    if not field and not keyword and not no_keyword:
+        return result
 
     if rows:
         for item in rows:
@@ -79,6 +83,11 @@ def get_book_info(field, keyword, is_exact=False):
 
         query = query[:-2]
 
+        columns.append('id')
+        book_id_at = len(columns) - 1
+
+        query += ', READERWARE.CALL_NUMBER '
+
         query += ' from READERWARE '
 
         if need_join:
@@ -86,29 +95,31 @@ def get_book_info(field, keyword, is_exact=False):
                 if item[4]:
                     query += 'left join %s on %s.%s = %s.%s ' % (item[3], item[4], item[7], item[3], item[6])
 
-        if isinstance(keyword, list) and keyword:
-            for index in range(0, len(keyword)):
-                if index != 0:
-                    query += 'and '
+        if not no_keyword:
+            if isinstance(keyword, list) and keyword:
+                for index in range(0, len(keyword)):
+                    if index != 0:
+                        query += 'and '
 
-                else:
-                    query += 'where '
+                    else:
+                        query += 'where '
 
-                if is_exact:
-                    query += 'READERWARE.%s="%s" ' % (field, keyword[index])
+                    if is_exact:
+                        query += 'READERWARE.%s="%s" ' % (field, keyword[index])
 
-                else:
-                    query += 'READERWARE.%s like "%%%s%%" ' % (field, keyword[index])
-                index += 1
-
-        else:
-            if is_exact:
-                query += 'where READERWARE.%s="%s" ' % (field, keyword)
+                    else:
+                        query += 'READERWARE.%s like "%%%s%%" ' % (field, keyword[index])
+                    index += 1
 
             else:
-                query += 'where READERWARE.%s like "%%%s%%" ' % (field, keyword)
+                if is_exact:
+                    query += 'where READERWARE.%s="%s" ' % (field, keyword)
 
-    query += 'limit %s' % config.SEARCH_MAX_ITEM
+                else:
+                    query += 'where READERWARE.%s like "%%%s%%" ' % (field, keyword)
+
+
+    query += 'limit %s' % search_limit
 
     query_result = run_query(query)
 
@@ -127,6 +138,8 @@ def get_book_info(field, keyword, is_exact=False):
             if not cover:
                 cover = get_book_cover_default()
 
+            book_id = values[book_id_at]
+
 
             content = dict(zip(columns, values))
 
@@ -135,7 +148,9 @@ def get_book_info(field, keyword, is_exact=False):
             if cover_indicator:
                 del content[cover_indicator]
 
-            result.append({'content': content, 'title': title, 'cover': cover})
+            del content['id']
+
+            result.append({'id': book_id, 'title': title, 'cover': cover, 'content': content})
 
     return result
 
