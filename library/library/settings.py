@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 
     'haystack',
+    'corsheaders',
 
     'webapp',
 )
@@ -52,6 +53,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 )
 
 ROOT_URLCONF = 'library.urls'
@@ -120,6 +123,7 @@ STATICFILES_DIRS = (
     STATIC_PATH_WEBAPP,
 
 )
+
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
@@ -131,3 +135,10 @@ TEMPLATE_DIRS = {
     os.path.join(BASE_DIR, )
 
 }
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = False
+
+CORS_ALLOW_METHODS = (
+        'GET',
+    )

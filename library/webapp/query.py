@@ -128,18 +128,18 @@ def get_book_info(field=False, keyword=False, is_exact=False, search_limit=confi
 
         for item in query_result:
             values = list(item)
+            print cover_indicator, values[cover_at]
 
             if title_indicator:
                 title = values[title_at]
 
-            if cover_indicator:
-                cover = values[cover_at]
+            if values[cover_at]:
+                cover = os.path.join(settings.STATIC_URL, values[cover_at])
 
-            if not cover:
+            else:
                 cover = get_book_cover_default()
 
             book_id = values[book_id_at]
-
 
             content = dict(zip(columns, values))
 
@@ -156,7 +156,7 @@ def get_book_info(field=False, keyword=False, is_exact=False, search_limit=confi
 
 
 def get_book_cover_default():
-    return config.DEFAULT_COVER_FILE_PATH
+    return config.DEFAULT_COVER_URL
 
 
 def get_book_cover(keyword):

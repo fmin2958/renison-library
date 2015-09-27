@@ -14,6 +14,8 @@ if not __book_cover_api_config:
 
 COVER_PATH = __book_cover_api_config.value
 
-DEFAULT_COVER_FILE_PATH = os.path.join(COVER_PATH, __book_cover_api_config.value_1)
+DEFAULT_COVER_URL = os.path.join(settings.STATIC_URL, COVER_PATH, __book_cover_api_config.value_1)
 
-SEARCH_MAX_ITEM = 40
+DEFAULT_COVER_FILE_PATH = os.path.join(settings.STATIC_PATH, COVER_PATH, __book_cover_api_config.value_1)
+
+SEARCH_MAX_ITEM = 2000
