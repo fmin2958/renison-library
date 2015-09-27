@@ -9,6 +9,12 @@ searchController.controller('searchController', ['$scope', '$http', '$routeParam
         function updateCurrentPageBooks(data, beginIndex) {
             var books = [];
             for (var i = beginIndex * 10; i < beginIndex * 10 + 10; i++) {
+                //Skip to next one if for some reason data[i] is undefined
+                //Also solves the bug where data.length < 10, 'undefined'
+                //will be pushed into books, causing angularjs to complain
+                if (data[i] === undefined) {
+                    continue;
+                }
                 books.push(data[i]);
             }
             $scope.currentPageBooks = books;
@@ -54,7 +60,7 @@ searchController.controller('searchController', ['$scope', '$http', '$routeParam
                     if (data.books.length < 10) {
                         $scope.endingPageNumber = 1;
                     } else {
-                        $scope.endingPageNumber = new Array(data.books.length / 10);
+                        $scope.endingPageNumber = new Array(Math.ceil(data.books.length / 10));
                     }
 
                     $location.search('page', beginPage);
