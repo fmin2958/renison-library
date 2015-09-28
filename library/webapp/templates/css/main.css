@@ -174,3 +174,17 @@ book_detail.html
     border: 1px solid #4CAF50 !important;
     border-radius: 2px !important;
 }
+
+/*book_list.html*/
+.listResult {
+    margin-top: 50px;
+}
+
+.listResult > div {
+    background-color: #f4f4f4;
+}
+
+/*about.html*/
+#developers_table td {
+    width: 220px;
+}

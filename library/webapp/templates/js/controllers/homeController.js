@@ -1,4 +1,4 @@
-var mainControllers = angular.module('mainControllers', []);
+var homeController = angular.module('homeController', []);
 
 //Constant Strings used to switch tabs
 var HOME_TAB = 'home';
@@ -8,7 +8,7 @@ var ABOUT_TAB = 'about';
 var CONTACT_TAB = 'contact';
 var googleBookApiLink = 'https://www.googleapis.com/books/v1/volumes';
 
-mainControllers.controller('homeController', ['$scope',
+homeController.controller('homeController', ['$scope',
     function($scope) {
         $scope.message = 'This is home page';
 		$scope.changeActiveTab(HOME_TAB);

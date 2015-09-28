@@ -1,8 +1,11 @@
 var renisonlibraryApp = angular.module('renisonlibraryApp', [
-  'ngRoute',
-  'mainControllers',
-  'searchController',
-  'bookDetailsController'
+	'ngRoute',
+	'homeController',
+	'searchController',
+	'bookDetailsController',
+	'bookListController',
+	'aboutController',
+	'contactController'
 ]);
 
 renisonlibraryApp.config(function($routeProvider) {
@@ -25,6 +28,31 @@ renisonlibraryApp.config(function($routeProvider) {
         .when('/detail/:bookId', {
             templateUrl : 'pages/book_detail.html',
             controller  : 'bookDetailsController'
+        })
+
+		// route for book list page
+		.when('/booklist', {
+			templateUrl	: 'pages/book_list.html',
+			controller	: 'bookListController',
+			reloadOnSearch	: false
+		})
+
+		// route for about page
+		.when('/about', {
+			templateUrl : 'pages/about.html',
+			controller  : 'aboutController'
+		})
+
+		// route for contact page
+		.when('/contact', {
+			templateUrl : 'pages/contact.html',
+			controller  : 'contactController'
+		})
+
+        // initially redirect to /home
+        // direct to home if url not found
+        .otherwise({
+            redirectTo  : '/home'
         })
 
 });
