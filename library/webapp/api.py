@@ -58,8 +58,6 @@ def get_book_detail(request, book_id):
     result = None
     result = {}
 
-    print book_id
-
     #TODO: this one is nasty - either update the models or write a generic raw query in query.py
 
     try:

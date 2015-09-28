@@ -81,7 +81,15 @@ def do_search(field, keyword):
 
 
 def get_all_book(limit=2000):
-    result = query.get_book_info(no_keyword=True, search_limit=limit)
+    book_list = query.get_book_info(no_keyword=True, search_limit=limit)
+
+    result = {}
+
+    if book_list:
+        result['books'] = book_list
+
+    else:
+        result['error'] = 'No Book Found'
 
     result = json.dumps(result)
 
