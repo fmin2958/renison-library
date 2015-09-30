@@ -130,6 +130,19 @@ book_detail.html
     color: #4CAF50;
 }
 
+.fieldSelectContainer {
+    width: 75px;
+    margin-top: 10px;
+    margin-left:auto;
+    margin-right:auto;
+    position: relative;
+}
+
+#fieldSelect {
+    width: 100%;
+    font-family: arial,sans-serif;
+}
+
 .filterButton {
     position: absolute;
     top: 0;

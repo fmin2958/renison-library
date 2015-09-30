@@ -3,17 +3,22 @@
         <input type="text" class="searchBar" ng-model="searchInput"/>
 <!--         <input type="image" src="../assets/images/filter.png" class="filterButton" ng-click="filter()"/> -->
     </div>
+    <div class="fieldSelectContainer">
+        <select id="fieldSelect" ng-model="fieldOpt"
+                ng-options="opt.index as opt.label for opt in fieldOptions">
+        </select>
+    </div>
     <div class="searchButtonContainer text-center">
-        <input type="button" value="Search" class="searchButton" ng-click="searchAction(searchInput)"/>
+        <input type="button" value="Search" class="searchButton" ng-click="searchAction(searchInput, fieldOpt)"/>
     </div>
 </div>
 <div class="text-center push-half-top resultPages" ng-show="searchResults">
     <button ng-click="selectFirstPage()">First</button>
     <div class="resultPageNumbers">
-        <button ng-repeat="pageNumber in endingPageNumber track by $index" 
-                ng-click="pageNumberClicked($index)"
-                ng-class="{ 'pageSelected': $index == selectedPageIndex }">
-            {{$index + 1}}
+        <button ng-repeat="pageNumber in pageNumbers" 
+                ng-click="pageNumberClicked(pageNumber)"
+                ng-class="{ 'pageSelected': pageNumber == selectedPageIndex }">
+            {{pageNumber + 1}}
         </button>
     </div>
     <button ng-click="selectLastPage()">Last</button>
@@ -29,7 +34,7 @@
             </div>
         </div>
         <div class="col-md-8">
-            <h1>{{book.title}}</h1>
+            <h2>{{book.title}}</h2>
             <!--h3 ng-show="book.volumeInfo.subtitle">{{book.volumeInfo.subtitle}}</h3-->
             <h4>{{book.content.author}}</h4>
             <a ng-href="{{getDetailUrl(book.id)}}">View More</a>
