@@ -15,6 +15,8 @@
     <script src="js/controllers/bookListController.js"></script>
     <script src="js/controllers/aboutController.js"></script>
     <script src="js/controllers/contactController.js"></script>
+    <script src="js/controllers/collectionController.js"></script>
+    <script src="js/controllers/circulationController.js"></script>
 
 </head>
 <body ng-controller="homeController">
@@ -27,19 +29,24 @@
         <div class="row">
             <div class="col-sm-10 col-sm-offset-1">
                 <ul class="nav nav-tabs nav-justified">
-                    <li id="nav-home-tab" class="active" ng-class="home_active_status"><a href="#home">Home</a></li>
+                    <li id="nav-home-tab" class="active" ng-class="home_active_status"><a href="#home">About</a></li>
+                    <li id="nav-about-tab" ng-class="about_active_status"><a href="#about">Project Members</a></li>
+                    <li id="nav-collection-tab" ng-class="collection_active_status"><a href="#collection">Collection</a></li>
+                    <li id="nav-circulation-tab" ng-class="circulation_active_status"><a href="#circulation">Circulation</a></li>
                     <li id="nav-booklist-tab" ng-class="booklist_active_status"><a href="#booklist">Book List</a></li>
                     <li id="nav-search-tab" ng-class="search_active_status"><a href="#search">Search</a></li>
-                    <li id="nav-about-tab" ng-class="about_active_status"><a href="#about">About</a></li>
                     <li id="nav-contact-tab" ng-class="contact_active_status"><a href="#contact">Contact Us</a></li>
                 </ul>
             </div>
         </div>
     </div>
     <div id="main" class="container">
-        
+
         <div ng-view></div>
-        
+
+    </div>
+    <div id="footer">
+        <p>The EASC is a work-in-progress. We work continually to refine and update our collection, and to monitor the effectiveness and accuracy of our organization and circulation strategies. Please feel free to contact us (<a href="mailto:tony.tin@uwaterloo.ca">tony.tin@uwaterloo.ca</a>) with feedback, suggestions, or concerns.</p>
     </div>
 </body>
 </html>

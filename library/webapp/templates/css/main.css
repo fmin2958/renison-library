@@ -35,6 +35,20 @@
     border-radius: 0;
 }
 
+
+/*footer*/
+#footer {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #000000;
+    font-family: arial, helvetica, sans-serif;
+    font-size: 12px;
+    color: #ffffff;
+    text-align: center;
+}
+
+
 /*
 book_detail.html
 */
@@ -198,6 +212,104 @@ book_detail.html
 }
 
 /*about.html*/
+#developers_info_container {
+    align: center;
+    font-size: 18px;
+}
+
 #developers_table td {
+    text-align: left;
+    padding: 5px;
     width: 220px;
+}
+
+/*home.html*/
+.homepageContent {
+    align: left;
+    text-align: left;
+    font: arial,sans-serif;
+}
+
+.homepageContent h1 {
+    font-size: 24px;
+    font-weight: bold;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.homepageContent p {
+    font-size: 18px;
+}
+
+.homepageImages {
+    width: 500px;
+}
+
+.homepageImages.floated {
+    position: relative;
+    float: left;
+    padding: 10px;
+    padding-left: 0;
+}
+
+/*collection.html*/
+.collectionContent {
+    align: left;
+    text-align: left;
+    font: arial,sans-serif;
+}
+
+.collectionContent h1 {
+    font-size: 24px;
+    font-weight: bold;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.collectionContent p {
+    font-size: 18px;
+}
+
+.collectionImages {
+    width: 500px;
+}
+
+/*circulation.html*/
+.circulationContent {
+    align: left;
+    text-align: left;
+    font: arial,sans-serif;
+}
+
+.circulationContent h1 {
+    font-size: 24px;
+    font-weight: bold;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.circulationContent p {
+    font-size: 18px;
+}
+
+/*contact.html*/
+.contactContent {
+    align: left;
+    text-align: left;
+    font: arial,sans-serif;
+}
+
+.contactContent h1 {
+    font-size: 24px;
+    font-weight: bold;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.contactContent p {
+    font-size: 18px;
+}
+
+.contactImages {
+    width: 500px;
 }
