@@ -1,0 +1,11 @@
+# Ignore bower components
+bower_components
+
+# Ignore WebStorm folders
+.idea
+
+# Ignore node modules
+node_modules
+
+# Ignore minified files
+public

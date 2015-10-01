@@ -1,0 +1,28 @@
+<div class="text-center push-half-top resultPages" ng-show="listResults">
+    <button ng-click="selectFirstPage()">First</button>
+    <div class="resultPageNumbers">
+        <button ng-repeat="pageNumber in pageNumbers"
+                ng-click="pageNumberClicked(pageNumber)"
+                ng-class="{'pageSelected': pageNumber == selectedPageIndex}">
+            {{pageNumber + 1}}
+        </button>
+    </div>
+    <button ng-click="selectLastPage()">Last</button>
+</div>
+<div class="text-center push-top" ng-show="noResults">
+    <h1>No results</h1>
+</div>
+<div class="listResult">
+    <div class="row push-bottom" ng-repeat="book in currentPageBooks">
+        <div class="col-md-4 text-center">
+            <div class="imageContainer">
+                <img ng-src="{{bookCoverBaseApi + book.cover}}"/>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <h1>{{book.title}}</h1>
+            <h4>{{book.content.author}}</h4>
+            <a ng-href="{{getDetailUrl(book.id)}}">View More</a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,28 @@
+<div class="jumbotron text-center push-top">
+    <div id="cover_container">
+        <img id="main_book_cover" ng-src="{{coverBaseApiLink + currentBook.cover}}">
+    </div>
+    <div id="info_container">
+        <table id="info_table" cellspacing="0" cellpadding="0" border="0">
+            <tbody>
+            <tr>
+                <td>
+                    <h2><b>{{currentBook.title}}</b></h2>
+                    <div id="info_content">
+                        <ul id="info_list">
+                            <li><b>Author: </b>{{currentBook.content.Author}}</li>
+                            <li ng-class="hide_null_ISBN"><b>ISBN: </b>{{currentBook.content.ISBN}}</li>
+                            <li ng-class="hide_null_dewey"><b>Dewey: </b>{{currentBook.content.Dewey}}</li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="desc_container">
+        <h2>Description</h2>
+        <div>{{currentBook.description}}</div>
+    </div>
+
+</div>
