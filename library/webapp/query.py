@@ -12,6 +12,7 @@ from webapp import models
 
 from webapp import config
 
+
 #TODO: this one is nasty - either update the models or write a generic raw query in query.py
 
 def run_query(query):
@@ -33,7 +34,7 @@ def run_query(query):
     return result
 
 
-def get_book_info(field, keyword):
+def get_book_info(field=False, keyword=False, is_exact=False, search_limit=config.SEARCH_MAX_ITEM, no_keyword=False):
     # the function will be get_book_info(columns, keyword)
     # columns: a list that contains columns that needs to be displayed
     # keyword: the keyword for searching books
@@ -44,12 +45,13 @@ def get_book_info(field, keyword):
     # NOTE: returned value changed: now returns a list of dict,
     # i.e. result[0] is the original expected output.
 
-    rows = run_query('select * from WEBAPP_CONFIGURATION where name like "%get_book_info%" and value = "1"')
+    rows = run_query('select * from WEBAPP_CONFIGURATION where name like "%get_book_info%" and value = "1" ')
 
     query = 'select '
     need_join = 0
     title_at = None
     cover_at = None
+    book_id_at = None
     title_indicator = u''
     cover_indicator = u''
     count = 0
@@ -59,7 +61,8 @@ def get_book_info(field, keyword):
 
     result = []
 
-    print 'flag'
+    if not field and not keyword and not no_keyword:
+        return result
 
     if rows:
         for item in rows:
@@ -81,6 +84,11 @@ def get_book_info(field, keyword):
 
         query = query[:-2]
 
+        columns.append('id')
+        book_id_at = len(columns) - 1
+
+        query += ', READERWARE.CALL_NUMBER '
+
         query += ' from READERWARE '
 
         if need_join:
@@ -88,46 +96,72 @@ def get_book_info(field, keyword):
                 if item[4]:
                     query += 'left join %s on %s.%s = %s.%s ' % (item[3], item[4], item[7], item[3], item[6])
 
-        query += 'where READERWARE.%s like "%%%s%%"' % (field, keyword)
+        if not no_keyword:
+            if isinstance(keyword, list) and keyword:
+                for index in range(0, len(keyword)):
+                    if index != 0:
+                        query += 'and '
+
+                    else:
+                        query += 'where '
+
+                    if is_exact:
+                        query += 'READERWARE.%s="%s" ' % (field, keyword[index])
+
+                    else:
+                        query += 'READERWARE.%s like "%%%s%%" ' % (field, keyword[index])
+                    index += 1
+
+            else:
+                if is_exact:
+                    query += 'where READERWARE.%s="%s" ' % (field, keyword)
+
+                else:
+                    query += 'where READERWARE.%s like "%%%s%%" ' % (field, keyword)
+
+
+    query += 'limit %s' % search_limit
 
     query_result = run_query(query)
 
-    values = list(query_result[0])
+    if query_result:
+        values = list(query_result[0])
 
-    for item in query_result:
-        values = list(item)
+        for item in query_result:
+            values = list(item)
 
-        if title_indicator:
-            title = values[title_at]
+            if title_indicator:
+                title = values[title_at]
 
-        if cover_indicator:
-            cover = values[cover_at]
+            if values[cover_at]:
+                cover = os.path.join(settings.STATIC_URL, values[cover_at])
 
-        if not cover:
-            cover = get_book_cover_default()
+            else:
+                cover = get_book_cover_default()
 
+            book_id = values[book_id_at]
 
-        content = dict(zip(columns, values))
+            content = dict(zip(columns, values))
 
-        if title_indicator:
-            del content[title_indicator]
-        if cover_indicator:
-            del content[cover_indicator]
+            if title_indicator:
+                del content[title_indicator]
+            if cover_indicator:
+                del content[cover_indicator]
 
-        result.append({'content': content, 'title': title, 'cover': cover})
+            del content['id']
+
+            result.append({'id': book_id, 'title': title, 'cover': cover, 'content': content})
 
     return result
 
 
 def get_book_cover_default():
-    return config.DEFAULT_COVER_FILE_PATH
+    return config.DEFAULT_COVER_URL
 
 
 def get_book_cover(keyword):
     #TODO: should be working, not tested
     result = u''
-    print 'finding book cover of: %s' % keyword
-    print
 
     try:
         result = models.BookCover.objects.filter(book_id = keyword).values('image_url')[0]['image_url']
