@@ -11,8 +11,8 @@
                     <div id="info_content">
                         <ul id="info_list">
                             <li><b>Author: </b>{{currentBook.content.Author}}</li>
-                            <li ng-class="hide_null_ISBN"><b>ISBN: </b>{{currentBook.content.ISBN}}</li>
-                            <li ng-class="hide_null_dewey"><b>Dewey: </b>{{currentBook.content.Dewey}}</li>
+                            <li ng-hide="currentBook.content.ISBN == null"><b>ISBN: </b>{{currentBook.content.ISBN}}</li>
+                            <li ng-hide="currentBook.content.Dewey == null"><b>Dewey: </b>{{currentBook.content.Dewey}}</li>
                         </ul>
                     </div>
                 </td>
@@ -20,7 +20,7 @@
             </tbody>
         </table>
     </div>
-    <div id="desc_container">
+    <div id="desc_container" ng-hide="currentBook.description == null">
         <h2>Description</h2>
         <div>{{currentBook.description}}</div>
     </div>

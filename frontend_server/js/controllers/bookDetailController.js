@@ -12,17 +12,6 @@ bookDetailsController.controller('bookDetailsController', ['$scope', '$http', '$
             if (status === 200) {
                 $scope.currentBook = data;
 				$scope.coverBaseApiLink = renLibBookCoverBaseApiLink;
-				/*Hide ISBN and/or Dewey if return result gives null*/
-				if (data.content.ISBN === null){
-					$scope.hide_null_ISBN = 'hidden';
-				} else {
-					$scope.hide_null_ISBN = '';
-				}
-				if (data.content.Dewey === null){
-					$scope.hide_null_Dewey = 'hidden';
-				} else {
-					$scope.hide_null_Dewey = '';
-				}
             }
         });
     }]);
