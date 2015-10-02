@@ -6,10 +6,13 @@ var BOOKLIST_TAB = 'booklist';
 var SEARCH_TAB = 'search';
 var ABOUT_TAB = 'about';
 var CONTACT_TAB = 'contact';
+var COLLECTION_TAB = 'collection';
+var CIRCULATION_TAB = 'circulation';
+
 var googleBookApiLink = 'https://www.googleapis.com/books/v1/volumes';
 
 homeController.controller('homeController', ['$scope',
     function($scope) {
         $scope.message = 'This is home page';
-		$scope.changeActiveTab(HOME_TAB);
+        $scope.changeActiveTab(HOME_TAB);
     }]);

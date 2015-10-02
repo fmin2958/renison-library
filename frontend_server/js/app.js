@@ -1,11 +1,13 @@
 var renisonlibraryApp = angular.module('renisonlibraryApp', [
-	'ngRoute',
-	'homeController',
-	'searchController',
-	'bookDetailsController',
-	'bookListController',
-	'aboutController',
-	'contactController'
+    'ngRoute',
+    'homeController',
+    'searchController',
+    'bookDetailsController',
+    'bookListController',
+    'aboutController',
+    'contactController',
+    'collectionController',
+    'circulationController'
 ]);
 
 renisonlibraryApp.config(['$routeProvider', function($routeProvider) {
@@ -30,24 +32,36 @@ renisonlibraryApp.config(['$routeProvider', function($routeProvider) {
             controller  : 'bookDetailsController'
         })
 
-		// route for book list page
-		.when('/booklist', {
-			templateUrl	: 'pages/book_list.html',
-			controller	: 'bookListController',
-			reloadOnSearch	: false
-		})
+        // route for book list page
+        .when('/booklist', {
+            templateUrl	: 'pages/book_list.html',
+            controller	: 'bookListController',
+            reloadOnSearch	: false
+        })
 
-		// route for about page
-		.when('/about', {
-			templateUrl : 'pages/about.html',
-			controller  : 'aboutController'
-		})
+        // route for about page
+        .when('/about', {
+            templateUrl : 'pages/about.html',
+            controller  : 'aboutController'
+        })
 
-		// route for contact page
-		.when('/contact', {
-			templateUrl : 'pages/contact.html',
-			controller  : 'contactController'
-		})
+        // route for contact page
+        .when('/contact', {
+            templateUrl : 'pages/contact.html',
+            controller  : 'contactController'
+        })
+
+        // route for collection page
+        .when('/collection', {
+            templateUrl : 'pages/collection.html',
+            controller  : 'collectionController'
+        })
+
+        // route for circulation page
+        .when('/circulation', {
+            templateUrl : 'pages/circulation.html',
+            controller  : 'circulationController'
+        })
 
         // initially redirect to /home
         // direct to home if url not found
@@ -62,21 +76,27 @@ renisonlibraryApp.config(['$routeProvider', function($routeProvider) {
 //To modify globally available variables
 renisonlibraryApp.run(['$rootScope', function($rootScope){
 	$rootScope.changeActiveTab = function(switchToTab){
-		$rootScope.home_active_status = '';
-		$rootScope.booklist_active_status = '';
-		$rootScope.search_active_status = '';
-		$rootScope.about_active_status = '';
-		$rootScope.contact_active_status = '';
-		if (switchToTab === HOME_TAB) {
-			$rootScope.home_active_status = 'active';
-		} else if (switchToTab === BOOKLIST_TAB) {
-			$rootScope.booklist_active_status = 'active';
-		} else if (switchToTab === SEARCH_TAB) {
-			$rootScope.search_active_status = 'active';
-		} else if (switchToTab === ABOUT_TAB) {
-			$rootScope.about_active_status = 'active';
-		} else if (switchToTab === CONTACT_TAB) {
-			$rootScope.contact_active_status = 'active';
-		}
-	}
+        $rootScope.home_active_status = '';
+        $rootScope.booklist_active_status = '';
+        $rootScope.search_active_status = '';
+        $rootScope.about_active_status = '';
+        $rootScope.contact_active_status = '';
+        $rootScope.collection_active_status = '';
+        $rootScope.circulation_active_status = '';
+        if (switchToTab === HOME_TAB) {
+            $rootScope.home_active_status = 'active';
+        } else if (switchToTab === BOOKLIST_TAB) {
+            $rootScope.booklist_active_status = 'active';
+        } else if (switchToTab === SEARCH_TAB) {
+            $rootScope.search_active_status = 'active';
+        } else if (switchToTab === ABOUT_TAB) {
+            $rootScope.about_active_status = 'active';
+        } else if (switchToTab === CONTACT_TAB) {
+            $rootScope.contact_active_status = 'active';
+        } else if (switchToTab === COLLECTION_TAB) {
+            $rootScope.collection_active_status = 'active';
+        } else if (switchToTab === CIRCULATION_TAB) {
+            $rootScope.circulation_active_status = 'active';
+        }
+    }
 }]);
